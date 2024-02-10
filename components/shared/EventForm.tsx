@@ -38,7 +38,9 @@ type EventFormProps = {
 };
 
 const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<any>();
+  console.log(files, "files");
+
   const initialValues =
     event && type === "Update"
       ? {
@@ -49,35 +51,25 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
       : eventDefaultValues;
   const router = useRouter();
 
-  const { startUpload } = useUploadThing("imageUploader");
-
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
   });
 
-  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    let uploadedImageUrl = "demo";
+  async function onSubmit(values: any) {
+    let uploadedImageUrl = values.imageUrl;
 
-    // if (files.length > 0) {
-    // const uploadedImages = await startUpload(files);
-    // if (!uploadedImages) {
-    //   return;
-    // }
-    // uploadedImageUrl = uploadedImages[0].url;
-    // }
-
-    if (true) {
+    if (type === "Create") {
       try {
-        const newEvent = await createEvent({
-          event: { ...values, imageUrl: uploadedImageUrl },
+        const newEvent: any = await createEvent({
+          event: { ...values, imageUrl: files },
           userId,
           path: "/profile",
         });
 
         if (newEvent) {
           form.reset();
-          router.push(`/events/${newEvent._id}`);
+          router.push(`/events/${newEvent?._id}`);
         }
       } catch (error) {
         console.log(error);
@@ -99,7 +91,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
         if (updatedEvent) {
           form.reset();
-          router.push(`/events/${updatedEvent._id}`);
+          router.push(`/events/${updatedEvent?._id}`);
         }
       } catch (error) {
         console.log(error);

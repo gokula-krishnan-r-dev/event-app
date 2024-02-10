@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import { ClerkProvider, auth } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 
@@ -23,11 +23,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { sessionClaims } = auth();
-
-  const userId = sessionClaims?.userId as string;
-  console.log(userId, "userId");
-
   return (
     <ClerkProvider>
       <html lang="en">
