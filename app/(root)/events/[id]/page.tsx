@@ -1,5 +1,6 @@
 import CheckoutButton from "@/components/shared/CheckoutButton";
 import Collection from "@/components/shared/Collection";
+import EventAdd from "@/components/shared/EventAdd";
 import {
   getEventById,
   getRelatedEventsByCategory,
@@ -22,6 +23,7 @@ const EventDetails = async ({
   if (!event) {
     return <div>loading...</div>;
   }
+  var TotalNumber: any = 0;
   return (
     <>
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
@@ -56,8 +58,10 @@ const EventDetails = async ({
                 </p>
               </div>
             </div>
-
-            <CheckoutButton event={event} />
+            {/* {!event?.isFree && (
+              <EventAdd event={event} TotalNumber={TotalNumber} />
+            )} */}
+            <CheckoutButton event={event} TotalNumber={TotalNumber} />
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">

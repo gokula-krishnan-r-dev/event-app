@@ -14,6 +14,8 @@ import Order from "../database/models/order.model";
 import Event from "../database/models/event.model";
 import { ObjectId } from "mongodb";
 import User from "../database/models/user.model";
+import { getEventById } from "./event.actions";
+import { getUserById } from "./user.actions";
 
 export const checkoutOrder = async (order: CheckoutOrderParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -49,7 +51,7 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
   }
 };
 
-export const createOrder = async (order: CreateOrderParams) => {
+export const createOrder = async (order: any) => {
   try {
     await connectToDatabase();
 
@@ -64,7 +66,35 @@ export const createOrder = async (order: CreateOrderParams) => {
     handleError(error);
   }
 };
+export const findOrderByParams = async (params: any) => {
+  try {
+    await connectToDatabase();
 
+    const foundOrder = await Order.findById(params);
+
+    if (!foundOrder) {
+      // Handle the case where no order is found based on the specified criteria
+      return null;
+    }
+
+    const event: any = foundOrder.event;
+    const buyer: any = foundOrder.buyer;
+
+    const Findevent = await getEventById(event);
+    const buyerInfo = await getUserById(buyer);
+
+    // Create a new object containing the order details, event details, and buyer details
+    const result = {
+      order: JSON.parse(JSON.stringify(foundOrder)),
+      event: Findevent,
+      buyer: buyerInfo,
+    };
+
+    return result;
+  } catch (error) {
+    handleError(error);
+  }
+};
 // GET ORDERS BY EVENT
 export async function getOrdersByEvent({
   searchString,
