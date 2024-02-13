@@ -84,13 +84,13 @@ const Checkout = ({
 
   const onCheckout = async () => {
     const order: any = {
-      eventTitle: event.title,
+      eventTitle: event?.title,
       eventId: event?._id,
-      price: event.price,
-      isFree: event.isFree,
+      price: event?.price,
+      isFree: event?.isFree,
       buyerId: userId,
     };
-    if (event.isFree) {
+    if (event?.isFree) {
       const order: any = {
         eventId: event?._id || "",
         buyerId: userId || "",
@@ -117,7 +117,7 @@ const Checkout = ({
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
       <Button type="submit" role="link" size="lg" className="button sm:w-fit">
-        {event.isFree ? "Get Ticket" : "Buy Ticket"}
+        {event?.isFree ? "Get Ticket" : "Buy Ticket"}
       </Button>
     </form>
   );
