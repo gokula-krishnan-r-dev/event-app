@@ -1,3 +1,5 @@
+import { ApiProvider } from "@/components/shared/ApiContext";
+
 export default function RootLayout({
   children,
 }: {

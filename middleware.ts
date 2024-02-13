@@ -9,6 +9,7 @@ export default authMiddleware({
     "/api/uploadthing",
     "/api/razorpay",
     "/api/order",
+    "/api/order/:id",
   ],
   ignoredRoutes: [
     "/api/webhook/clerk",

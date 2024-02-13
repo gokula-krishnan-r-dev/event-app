@@ -10,6 +10,7 @@ export interface IOrder extends Document {
   event: string;
   buyer: string;
   ticket_Id: string;
+  qrCodeImage: string;
 }
 
 export type IOrderItem = {
@@ -48,6 +49,9 @@ const OrderSchema = new Schema({
     default: () => generateTicketNumber(),
   },
   ticket_number: {
+    type: String,
+  },
+  qrCodeImage: {
     type: String,
   },
 });

@@ -1,18 +1,39 @@
+"use client";
 import QRCode from "react-qr-code";
-import { findOrderByParams } from "@/lib/actions/order.actions";
 import { formatDateTime } from "@/lib/utils";
 import React from "react";
 import Link from "next/link";
+
 export default async function Page({ params }: { params: { slug: string } }) {
-  const order = await findOrderByParams(params.slug);
-  if (!order) {
-    return <div>Loading....</div>;
-  }
-  console.log(order, "order");
+  var loading = false;
+  var order: any = [];
+  const response = fetch(`http://localhost:3000/api/order/${params.slug}`, {
+    next: { revalidate: 10 },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data, "data");
+      order = data.order;
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error fetching order:", error);
+    });
+  const response2 = await response;
+  const handleDownloadPDF = async () => {
+    const { downloadPDF } = await import("@/lib/utils");
+
+    downloadPDF();
+  };
 
   return (
     <main className="ticket-system  flex items-center justify-center ">
-      <div className="top">
+      <div id="actual-receipt" className="top">
         {/* <h1 className="title">Wait a second, your ticket is being printed</h1> */}
         <div className="printer"></div>
         <div className="receipts-wrapper">
@@ -37,10 +58,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </p>
                 <div className="flex gap-2 pb-3">
                   <span className="p-semibold-14 w-min rounded-full bg-green-100 px-4 py-1 text-green-60">
-                    {order?.event.isFree ? "FREE" : `$${order?.event.price}`}
+                    {order?.event?.isFree ? "FREE" : `$${order?.event?.price}`}
                   </span>
                   <p className="p-semibold-14 w-min rounded-full bg-grey-500/10 px-4 py-1 text-grey-500 line-clamp-1">
-                    {order?.event.category.name}
+                    {order?.event?.category?.name}
                   </p>
                 </div>
               </div>
@@ -69,11 +90,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 <div className="item">
                   <span>organizer</span>
                   <p className="p-medium-14 md:p-medium-16 text-grey-600">
-                    {order?.event.organizer.firstName}
-                    {order?.event.organizer.lastName}
+                    {order?.event?.organizer?.firstName}
+                    {order?.event?.organizer?.lastName}
                   </p>
                 </div>
-
+                <div className="item">
+                  <span>Number of Ticket : </span>
+                  <p className="p-medium-16 p-medium-18 text-grey-500">
+                    {order?.order?.ticket_number}
+                  </p>
+                </div>
                 <div className="item">
                   <span>Location</span>
                   <h3>{order?.event?.location}</h3>
@@ -106,6 +132,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
           </div>
         </div>
       </div>
+      <button
+        className="p-6 py-3 bg-white rounded-2xl mt-8 shadow-md text-lg font-semibold text-blue-500 hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out"
+        onClick={handleDownloadPDF}
+      >
+        Download
+      </button>
     </main>
   );
 }

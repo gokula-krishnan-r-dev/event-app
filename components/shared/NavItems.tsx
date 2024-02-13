@@ -6,13 +6,13 @@ import { usePathname } from "next/navigation";
 import React from "react";
 
 const NavItems = async () => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
   // const router = useRouter();
   // const userIsAdmin = await isAdmin();
   return (
     <ul className="md:flex-between flex w-full flex-col items-start gap-5 md:flex-row">
       {headerLinks.map((link) => {
-        const isActive = pathname === link.route;
+        const isActive = link.route === "demo";
 
         return (
           <React.Fragment key={link.route}>

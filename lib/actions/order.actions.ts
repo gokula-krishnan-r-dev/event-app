@@ -1,6 +1,7 @@
 "use server";
-
+import nodemailer from "nodemailer";
 import Stripe from "stripe";
+var QRCode = require("qrcode");
 import {
   CheckoutOrderParams,
   CreateOrderParams,
@@ -54,18 +55,68 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
 export const createOrder = async (order: any) => {
   try {
     await connectToDatabase();
-
+    const qrCodeURL = `http://localhost:3000/order/${order.eventId}`;
+    const qrCodeImage = await QRCode.toDataURL(qrCodeURL);
     const newOrder = await Order.create({
       ...order,
       event: order.eventId,
       buyer: order.buyerId,
+      qrCodeImage: qrCodeImage,
     });
-
+    sendOrderConfirmationEmail(newOrder, order.eventId);
     return JSON.parse(JSON.stringify(newOrder));
   } catch (error) {
     handleError(error);
   }
 };
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.forwardemail.net",
+  port: 465,
+  secure: true,
+  auth: {
+    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+    user: "gokulakrishnanr812@gmail.com",
+    pass: "aecm enny mitt ebgy",
+  },
+});
+const sendOrderConfirmationEmail = async (order: any, eventId: any) => {
+  console.log(order, "order");
+
+  try {
+    // const qrCodeURL = `http://localhost:3000/order/${eventId}`;
+    // const qrCodeImage = await QRCode.toDataURL(qrCodeURL);
+    const qrCodeURL = `http://localhost:3000/order/${eventId}`;
+    const foundUser: any = await User.findById(order.buyer);
+    const foundEvent: any = await Event.findById(eventId);
+    // Define the email content
+    const mailOptions = {
+      from: "gokulakrishnanr812@gmail.com",
+      to: foundUser.email,
+      subject: `Registration Successful | ${foundEvent.title}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <p style="font-size: 16px;">Dear ${order?.buyerName},</p>
+          <p style="font-size: 16px;">Thank you for your order! Your order ID is ${order?.ticket_Id}.</p>
+          <p style="font-size: 16px;">Please find your event details below:</p>
+          <p style="font-size: 16px;">Event Title: ${foundEvent.title}</p>
+          <p style="font-size: 16px;">Date: </p>
+          <p style="font-size: 16px;">Location: ${foundEvent.location}</p>
+          <p style="font-size: 16px;">Make sure to attend the event on time!</p>
+          <p style="font-size: 16px;">Event Link: <a href="${qrCodeURL}" style="color: #007bff;">${qrCodeURL}</a></p>
+          <img src="${order?.qrCodeImage}" alt="Event QR Code" style="height: 110px; max-width: 100%; width: 110px; margin-top: 10px;">
+        </div>
+      `,
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const findOrderByParams = async (params: any) => {
   try {
     await connectToDatabase();

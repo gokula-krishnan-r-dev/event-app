@@ -308,7 +308,8 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
-  transform: translateY(-510px);
+  /* transform: translateY(-510px); */
+  transform: translateY(0);
   animation-duration: 2.5s;
   animation-delay: 500ms;
   animation-name: print;
@@ -398,7 +399,7 @@ body {
   margin: 0;
   font-weight: 400;
 }
-@keyframes print {
+/* @keyframes print {
   0% {
     transform: translateY(-510px);
   }
@@ -411,7 +412,7 @@ body {
   100% {
     transform: translateY(0);
   }
-}
+} */
 .padding-8 {
   padding-top: 90px !important;
   padding-bottom: 90px !important;
