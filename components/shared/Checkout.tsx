@@ -6,15 +6,12 @@ import { Button } from "../ui/button";
 import useRazorpay from "react-razorpay";
 import { createOrder } from "@/lib/actions/order.actions";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
 
 declare global {
   interface Window {
     Razorpay: any;
   }
 }
-
-// loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const Checkout = ({
   event,

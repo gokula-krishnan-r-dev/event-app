@@ -94,15 +94,15 @@ const sendOrderConfirmationEmail = async (order: any, eventId: any) => {
     const mailOptions = {
       from: "gokulakrishnanr812@gmail.com",
       to: foundUser.email,
-      subject: `Registration Successful | ${foundEvent.title}`,
+      subject: `Registration Successful | ${foundEvent?.title}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <p style="font-size: 16px;">Dear ${order?.buyerName},</p>
           <p style="font-size: 16px;">Thank you for your order! Your order ID is ${order?.ticket_Id}.</p>
           <p style="font-size: 16px;">Please find your event details below:</p>
-          <p style="font-size: 16px;">Event Title: ${foundEvent.title}</p>
+          <p style="font-size: 16px;">Event Title: ${foundEvent?.title}</p>
           <p style="font-size: 16px;">Date: </p>
-          <p style="font-size: 16px;">Location: ${foundEvent.location}</p>
+          <p style="font-size: 16px;">Location: ${foundEvent?.location}</p>
           <p style="font-size: 16px;">Make sure to attend the event on time!</p>
           <p style="font-size: 16px;">Event Link: <a href="${qrCodeURL}" style="color: #007bff;">${qrCodeURL}</a></p>
           <img src="${order?.qrCodeImage}" alt="Event QR Code" style="height: 110px; max-width: 100%; width: 110px; margin-top: 10px;">

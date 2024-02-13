@@ -16,7 +16,7 @@ const CheckoutButton = ({
 }) => {
   const { user } = useUser();
   const userId = user?.publicMetadata.userId as string;
-  const hasEventFinished = new Date(event.endDateTime) < new Date();
+  const hasEventFinished = new Date(event?.endDateTime) < new Date();
   const [quantity, setQuantity] = useState(1);
 
   const increaseQuantity = () => {
@@ -28,7 +28,7 @@ const CheckoutButton = ({
       setQuantity(quantity - 1);
     }
   };
-  const totalPrice = event.isFree
+  const totalPrice = event?.isFree
     ? "FREE"
     : `₹${Number(event?.price) * quantity}`;
 

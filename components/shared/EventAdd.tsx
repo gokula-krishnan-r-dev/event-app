@@ -13,7 +13,7 @@ const EventAdd = ({ event, TotalNumber }: any) => {
       setQuantity(quantity - 1);
     }
   };
-  const totalPrice = event.isFree ? "FREE" : `₹${event?.price * quantity}`;
+  const totalPrice = event?.isFree ? "FREE" : `₹${event?.price * quantity}`;
 
   return (
     <section>
