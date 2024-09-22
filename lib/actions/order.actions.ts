@@ -55,7 +55,7 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
 export const createOrder = async (order: any) => {
   try {
     await connectToDatabase();
-    const qrCodeURL = `http://localhost:3000/order/${order.eventId}`;
+    const qrCodeURL = `https://booking-backend-omega.vercel.app/order/${order.eventId}`;
     const qrCodeImage = await QRCode.toDataURL(qrCodeURL);
     const newOrder = await Order.create({
       ...order,
@@ -85,9 +85,9 @@ const sendOrderConfirmationEmail = async (order: any, eventId: any) => {
   console.log(order, "order");
 
   try {
-    // const qrCodeURL = `http://localhost:3000/order/${eventId}`;
+    // const qrCodeURL = `https://booking-backend-omega.vercel.app/order/${eventId}`;
     // const qrCodeImage = await QRCode.toDataURL(qrCodeURL);
-    const qrCodeURL = `http://localhost:3000/order/${eventId}`;
+    const qrCodeURL = `https://booking-backend-omega.vercel.app/order/${eventId}`;
     const foundUser: any = await User.findById(order.buyer);
     const foundEvent: any = await Event.findById(eventId);
     // Define the email content

@@ -149,7 +149,7 @@ Replace the placeholder values with your actual credentials
 npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
+Open [https://booking-backend-omega.vercel.app](https://booking-backend-omega.vercel.app) in your browser to view the project.
 
 ## <a name="snippets">🕸️ Snippets</a>
 

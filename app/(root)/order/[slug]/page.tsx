@@ -7,9 +7,12 @@ import Link from "next/link";
 export default async function Page({ params }: { params: { slug: string } }) {
   var loading = false;
   var order: any = [];
-  const response = fetch(`http://localhost:3000/api/order/${params.slug}`, {
-    next: { revalidate: 10 },
-  })
+  const response = fetch(
+    `https://booking-backend-omega.vercel.app/api/order/${params.slug}`,
+    {
+      next: { revalidate: 10 },
+    }
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -109,7 +112,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <div className="receipt padding-8 qr-code">
               <QRCode
                 style={{ height: "110px", maxWidth: "100%", width: "110px" }}
-                value={`http://localhost:3000/order/${order?.event?._id}`}
+                value={`https://booking-backend-omega.vercel.app/order/${order?.event?._id}`}
                 viewBox={`0 0 256 256`}
               />
               {/* <svg

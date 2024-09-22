@@ -97,7 +97,7 @@ const Checkout = ({
       };
       const newOrder = await createOrder(order);
       console.log(newOrder, "newOrder");
-      if (newOrder) {
+      if (newOrder?._id) {
         router.push(`/order/${newOrder._id}`);
       } else {
         alert("Something went wrong");
